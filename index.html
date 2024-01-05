@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ollama Chat</title>
+    <style>
+        #chat {
+            height: 300px;
+            border: 1px solid #ccc;
+            padding: 5px;
+            overflow-y: scroll;
+        }
+        #input {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="chat"></div>
+    <textarea id="input"></textarea>
+    <button onclick="send()">Send</button>
+
+    <script>
+        function send() {
+            var input = document.getElementById("input");
+            var text = input.value;
+            input.value = '';
+
+            // Display the user's message
+            var chat = document.getElementById("chat");
+            chat.innerHTML += '<div>User: ' + text + '</div>';
+
+            // Send the message to the server
+            fetch('/generate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    model: "llama2",
+                    prompt: text,
+                    stream: false
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Display the server's response
+                chat.innerHTML += '<div>Bot: ' + data.response + '</div>';
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>
