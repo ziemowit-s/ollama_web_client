@@ -61,7 +61,7 @@ body, html {
 
 /* User messages */
 .chat-entry.user {
-    background-color: #0f62fe;
+    background-color: #3b76d9;
     justify-content: flex-end;
     text-align: right;
 }

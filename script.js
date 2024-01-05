@@ -46,6 +46,7 @@ function send() {
     var text = input.value.trim();
     if (!text) return; // Don't send empty messages
     input.value = ''; // Clear the input after sending
+    updateChat(text, null, null); // Display user message immediately
 
     var fullPrompt = context ? context + ". " + text : text;
 
