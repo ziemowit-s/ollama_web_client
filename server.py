@@ -24,9 +24,26 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             self.end_headers()
             with open('index.html', 'rb') as file:
                 self.wfile.write(file.read())
+
+        # Serve CSS files
+        elif self.path.endswith(".css"):
+            self.send_response(200)
+            self.send_header('Content-type', 'text/css')
+            self.end_headers()
+            with open(self.path[1:], 'rb') as file:  # path[1:] to remove the leading '/'
+                self.wfile.write(file.read())
+
+        # Serve JavaScript files
+        elif self.path.endswith(".js"):
+            self.send_response(200)
+            self.send_header('Content-type', 'application/javascript')
+            self.end_headers()
+            with open(self.path[1:], 'rb') as file:
+                self.wfile.write(file.read())
+
         elif self.path == '/models':
             # Fetch model list from local Ollama server
-            response = requests.get('http://localhost:11434/api/tags')
+            response = requests.get(get_address(path="api/tags"))
             model_list = [model["name"] for model in response.json()["models"]]
             # Send response back to the client
             self.send_response(200)
