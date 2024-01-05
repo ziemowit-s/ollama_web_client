@@ -64,6 +64,9 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             body = self.rfile.read(content_length).decode("utf-8")
             # Convert the body to a Python dictionary
             body_dict = json.loads(body)
+            print("=====Request:======")
+            print(body_dict)
+            print("==================")
 
             # Make a request to the Ollama server
             response = requests.post(get_address(path="api/generate"), json=body_dict)

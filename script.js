@@ -33,7 +33,7 @@ function updateChat(userMessage, botMessage, modelName) {
         chat.innerHTML += '<div class="chat-entry user"><p>' + userMessage + '</p></div>';
     }
     if (botMessage) {
-        chat.innerHTML += '<div class="chat-entry bot"><p>' + modelName + ': ' + botMessage + '</p></div>';
+        chat.innerHTML += '<div class="chat-entry bot"><p><b>' + modelName + '</b>: ' + botMessage + '</p></div>';
     }
     chat.scrollTop = chat.scrollHeight; // Auto-scroll to the latest message
 }

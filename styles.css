@@ -13,12 +13,12 @@ body, html {
 #contextArea, #input {
     background-color: #333;
     border: none;
-    padding: 16px;
-    border-radius: 8px;
-    margin: 16px;
+    padding: 12px;
+    border-radius: 5px;
+    margin: 10px;
     color: white;
-    font-size: 18px;
-    width: calc(100% - 32px);
+    font-size: 16px;
+    width: calc(100% - 20px);
     box-sizing: border-box;
 }
 
@@ -26,8 +26,8 @@ body, html {
 #container {
     display: flex;
     flex-direction: column;
-    height: calc(100vh - 100px); /* Adjust based on your needs */
-    margin: 0 16px;
+    height: calc(100vh - 70px);
+    margin: 0 10px;
 }
 
 /* Chat area */
@@ -36,19 +36,19 @@ body, html {
     overflow-y: auto;
     background-color: #333;
     border-radius: 10px;
-    padding: 16px;
-    margin-bottom: 100px; /* Adjust based on your needs */
+    padding: 12px;
+    margin-bottom: 70px; /* Adjust based on the height of the inputArea */
 }
 
 /* Chat entries */
 .chat-entry {
-    font-size: 18px;
+    font-size: 16px;
     background-color: #0f62fe;
-    border-radius: 20px;
+    border-radius: 18px;
     max-width: 80%;
     word-wrap: break-word;
-    padding: 12px 18px;
-    margin: 8px 0;
+    padding: 10px 16px;
+    margin: 6px 0;
     display: flex;
 }
 
@@ -71,20 +71,20 @@ body, html {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 16px 16px;
+    padding: 12px 10px;
 }
 
 #inputArea input {
     flex-grow: 1;
-    margin-right: 16px;
+    margin-right: 10px;
 }
 
 #inputArea button {
-    padding: 16px 24px;
+    padding: 12px 24px;
     background-color: #4CAF50;
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 5px;
     cursor: pointer;
 }
 
@@ -93,20 +93,20 @@ body, html {
 }
 
 #inputArea select {
-    padding: 16px;
+    padding: 12px;
     background-color: #333;
     color: white;
     border: none;
-    border-radius: 8px;
-    margin-right: 16px;
+    border-radius: 5px;
+    margin-right: 10px;
 }
 
 /* Responsive design for mobile devices */
 @media (max-width: 600px) {
     #contextArea, #input {
-        margin: 12px;
-        padding: 14px;
-        font-size: 16px;
+        margin: 6px;
+        padding: 10px;
+        font-size: 10px;
     }
 
     #inputArea {
@@ -115,7 +115,7 @@ body, html {
     }
 
     #inputArea input {
-        margin-bottom: 12px;
+        margin-bottom: 6px;
     }
 
     #inputArea button {
@@ -125,5 +125,10 @@ body, html {
     .chat-entry {
         max-width: 100%;
         word-wrap: break-word;
+    }
+
+    .chat-entry.user {
+        justify-content: flex-start;
+        text-align: left;
     }
 }
