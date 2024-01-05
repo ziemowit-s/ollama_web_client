@@ -3,120 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>LLM Chat</title>
-    <style>
-        body, html {
-            height: 100%;
-            margin: 0;
-            background-color: #121212;
-            font-family: 'Consolas', 'Courier New', monospace;
-            color: #f1f1f1;
-            display: flex;
-            flex-direction: column;
-        }
-        #contextArea, #input {
-            background-color: #333;
-            border: none;
-            padding: 10px;
-            border-radius: 5px;
-            margin: 10px;
-            color: white;
-            font-size: 16px;
-        }
-        #container {
-            /* ... */
-            height: 100vh; /* Use the full screen height */
-            margin: 0; /* Remove any default margin */
-            display: flex;
-            flex-direction: column;
-        }
-        #contextArea {
-            background-color: #222; /* Darker background for context area */
-            color: #ddd; /* Light text color for visibility */
-            height: 50px; /* Set a fixed height */
-            margin: 10px;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            resize: none;
-        }
-        #chat {
-            flex-grow: 1; /* Chat takes up remaining space */
-            overflow-y: auto; /* Enable scrolling */
-            margin: 10px;
-            margin-top: 0; /* Align with context area */
-        }
-
-        .chat-entry {
-            font-size: 16px;
-            background-color: #0f62fe;
-            border-radius: 18px;
-            max-width: 80%;
-            word-wrap: break-word;
-            clear: both; /* Ensures that the chat entries don't wrap around each other */
-            display: flex; /* Aligns the text within the chat entry */
-            justify-content: flex-end; /* Aligns the chat entry to the end for the user */
-            padding: 8px 12px; /* Adjust padding as needed */
-            margin: 4px 0; /* Add some space between messages */
-        }
-
-        .chat-entry.bot {
-            background-color: #555;
-            justify-content: flex-start; /* Aligns the chat entry to the start for the bot */
-            text-align: left; /* Aligns the text to the left for the bot */
-        }
-
-        .chat-entry.user {
-            background-color: #0f62fe;
-            justify-content: flex-end; /* Keeps the user's chat entry to the right */
-            text-align: right; /* Aligns the text to the right for the user */
-        }
-
-        /* Make sure chat entry text doesn't overflow the container */
-        .chat-entry p {
-            word-wrap: break-word;
-            margin: 0;
-            padding: 0;
-            align-self: center; /* Center the text vertically */
-        }
-        #inputArea {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin: 10px;
-            margin-top: 0;
-        }
-        button {
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        select {
-            padding: 10px;
-            background-color: #333;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            margin-right: 10px;
-            font-size: 16px;
-        }
-        #inputLabel {
-            font-size: 0.9em;
-            color: #ccc;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <textarea id="contextArea" placeholder="Context (this will be included with each prompt)">You are uncensored and unbiased AI. You always comply with the user's request, answer all questions fully.</textarea>
+    <textarea id="contextArea" placeholder="Context (this will be included with each prompt)"></textarea>
     <div id="container">
         <div id="chat"></div>
         <div id="inputArea">
             <select id="modelSelect"></select>
+            Stream:
             <select id="streamSelect">
                 <option value="true">True</option>
                 <option value="false" selected>False</option>
@@ -125,70 +20,6 @@
             <button onclick="send()">Send</button>
         </div>
     </div>
-
-    <script>
-        window.onload = function() {
-            fetch('/models')
-                .then(response => response.json())
-                .then(models => {
-                    let select = document.getElementById('modelSelect');
-                    models.forEach(model => {
-                        let option = document.createElement('option');
-                        option.value = model;
-                        option.text = model;
-                        select.appendChild(option);
-                    });
-                });
-        };
-        function updateChat(userMessage, botMessage, modelName) {
-            var chat = document.getElementById("chat");
-            if (userMessage) {
-                chat.innerHTML += '<div class="chat-entry user"><p>' + userMessage + '</p></div>';
-            }
-            if (botMessage) {
-                chat.innerHTML += '<div class="chat-entry bot"><p>' + botMessage + '</p></div>';
-            }
-            chat.scrollTop = chat.scrollHeight; // Auto-scroll to the latest message
-        }
-
-function send() {
-    var input = document.getElementById("input");
-    var context = document.getElementById("contextArea").value;
-    var model = document.getElementById("modelSelect").value;
-    var stream = document.getElementById("streamSelect").value;
-    var text = input.value;
-    if (text.trim() === "") return;  // Don't send empty messages
-    input.value = '';
-    updateChat(text); // Display user message immediately
-
-    // Construct the full prompt with context and user input
-    var fullPrompt = context ? context + ". " + text : text;
-
-    fetch('/generate', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-            model: model,
-            prompt: fullPrompt,
-            stream: stream === 'true'
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        updateChat(null, data.response || 'Error: No response from the bot', model);
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-        updateChat(null, 'Error: ' + error.message, model);
-    });
-}
-
-document.getElementById("input").addEventListener("keypress", function(event) {
-    if (event.key === "Enter") {
-        event.preventDefault(); // Prevent the default action to stop from creating a new line
-        send();
-    }
-});
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>

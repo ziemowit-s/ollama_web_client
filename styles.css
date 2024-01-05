@@ -1,0 +1,129 @@
+/* Main body and font styles */
+body, html {
+    height: 100%;
+    margin: 0;
+    background-color: #121212;
+    font-family: 'Consolas', 'Courier New', monospace;
+    color: #f1f1f1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Context and input text areas */
+#contextArea, #input {
+    background-color: #333;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px;
+    color: white;
+    font-size: 16px;
+    width: calc(100% - 20px);
+    box-sizing: border-box;
+}
+
+/* Chat container */
+#container {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 70px);
+    margin: 0 10px;
+}
+
+/* Chat area */
+#chat {
+    flex-grow: 1;
+    overflow-y: auto;
+    background-color: #333;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 70px; /* Adjust based on the height of the inputArea */
+}
+
+/* Chat entries */
+.chat-entry {
+    font-size: 16px;
+    background-color: #0f62fe;
+    border-radius: 18px;
+    max-width: 80%;
+    word-wrap: break-word;
+    padding: 8px 12px;
+    margin: 4px 0;
+    display: flex;
+}
+
+/* Bot messages */
+.chat-entry.bot {
+    background-color: #555;
+    justify-content: flex-start;
+    text-align: left;
+}
+
+/* User messages */
+.chat-entry.user {
+    background-color: #0f62fe;
+    justify-content: flex-end;
+    text-align: right;
+}
+
+/* Input area and its children elements */
+#inputArea {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 10px;
+}
+
+#inputArea input {
+    flex-grow: 1;
+    margin-right: 10px;
+}
+
+#inputArea button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#inputArea button:hover {
+    background-color: #45a049;
+}
+
+#inputArea select {
+    padding: 10px;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+/* Responsive design for mobile devices */
+@media (max-width: 600px) {
+    #contextArea, #input {
+        margin: 5px;
+        padding: 8px;
+        font-size: 14px;
+    }
+
+    #inputArea {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    #inputArea input {
+        margin-bottom: 5px;
+    }
+
+    #inputArea button {
+        width: 100%;
+    }
+
+    .chat-entry {
+        max-width: 100%;
+        word-wrap: break-word;
+    }
+}
