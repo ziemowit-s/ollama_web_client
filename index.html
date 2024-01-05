@@ -1,55 +1,78 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Ollama Chat</title>
+    <title>LLM Chat</title>
     <style>
-        #chat {
-            height: 300px;
-            border: 1px solid #ccc;
-            padding: 5px;
-            overflow-y: scroll;
-        }
-        #input {
-            margin-top: 10px;
-        }
+        #chat { height: 300px; border: 1px solid #ccc; padding: 5px; overflow-y: scroll; }
+        #input { margin-top: 10px; }
     </style>
 </head>
 <body>
     <div id="chat"></div>
+    <select id="modelSelect"></select>
+    Hold history
+    <select id="streamSelect">
+        <option value="true">True</option>
+        <option value="false" selected>False</option>
+    </select>
     <textarea id="input"></textarea>
     <button onclick="send()">Send</button>
 
     <script>
+        window.onload = function() {
+            fetch('/models')
+                .then(response => response.json())
+                .then(models => {
+                    let select = document.getElementById('modelSelect');
+                    models.forEach(model => {
+                        let option = document.createElement('option');
+                        option.value = model;
+                        option.text = model;
+                        select.appendChild(option);
+                    });
+                });
+        };
+        function updateChat(response) {
+                    var chat = document.getElementById("chat");
+                    var model = document.getElementById("modelSelect").value;
+                    chat.innerHTML += '<div>' + model + ': ' + response + '</div>';
+                    chat.scrollTop = chat.scrollHeight; // Auto-scroll to the latest message
+                }
+
         function send() {
             var input = document.getElementById("input");
+            var model = document.getElementById("modelSelect").value;
+            var stream = document.getElementById("streamSelect").value;
             var text = input.value;
+            if (text.trim() === "") return;  // Don't send empty messages
             input.value = '';
+            updateChat('User: ' + text); // Display user message immediately
 
-            // Display the user's message
-            var chat = document.getElementById("chat");
-            chat.innerHTML += '<div>User: ' + text + '</div>';
-
-            // Send the message to the server
             fetch('/generate', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
-                    model: "llama2",
+                    model: model,
                     prompt: text,
-                    stream: false
+                    stream: stream === 'true'
                 })
             })
             .then(response => response.json())
             .then(data => {
-                // Display the server's response
-                chat.innerHTML += '<div>Bot: ' + data.response + '</div>';
+                updateChat(data.response || 'Error: No response from the bot');
             })
             .catch((error) => {
                 console.error('Error:', error);
+                updateChat('Error: ' + error.message);
             });
         }
+
+        document.getElementById("input").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault(); // Prevent the default action to stop from creating a new line
+                send();
+            }
+        });
     </script>
 </body>
 </html>

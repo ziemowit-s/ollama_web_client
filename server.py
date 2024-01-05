@@ -1,9 +1,40 @@
+import ssl
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs
 import json
 import requests
 
+OLLAMA_ADDRESS = "localhost"
+OLLAMA_PORT = 11434
+
+
+def get_address(path):
+    if path.startswith("/"):
+        path = path[1:]
+    return f"http://{OLLAMA_ADDRESS}:{OLLAMA_PORT}/{path}"
+
+
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        # Check if the path is the root path
+        if self.path == '/':
+            # Serve index.html
+            self.send_response(200)
+            self.send_header('Content-type', 'text/html')
+            self.end_headers()
+            with open('index.html', 'rb') as file:
+                self.wfile.write(file.read())
+        elif self.path == '/models':
+            # Fetch model list from local Ollama server
+            response = requests.get('http://localhost:11434/api/tags')
+            model_list = [model["name"] for model in response.json()["models"]]
+            # Send response back to the client
+            self.send_response(200)
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps(model_list).encode('utf-8'))
+        else:
+            self.send_error(404)
 
     def do_POST(self):
         # Parse the URL to get the path
@@ -18,7 +49,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             body_dict = json.loads(body)
 
             # Make a request to the Ollama server
-            response = requests.post('http://localhost:11434/api/generate', json=body_dict)
+            response = requests.post(get_address(path="api/generate"), json=body_dict)
             ollama_response = response.json()
 
             # Send response back to the client
@@ -27,5 +58,22 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(json.dumps(ollama_response).encode('utf-8'))
 
-httpd = HTTPServer(('localhost', 8000), SimpleHTTPRequestHandler)
-httpd.serve_forever()
+
+def run(server_class=HTTPServer, handler_class=SimpleHTTPRequestHandler, addr='0.0.0.0', port=4443):
+    server_address = (addr, port)
+    httpd = server_class(server_address, handler_class)
+
+    # Wrap the socket with SSL
+    httpd.socket = ssl.wrap_socket(
+        httpd.socket,
+        keyfile='domain.key',  # Corrected path to your key file
+        certfile='domain.crt',   # Path to your certificate file
+        server_side=True
+    )
+
+    print(f'Starting https server on {addr}:{port}')
+    httpd.serve_forever()
+
+
+if __name__ == "__main__":
+    run()
