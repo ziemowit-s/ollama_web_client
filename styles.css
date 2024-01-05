@@ -13,7 +13,7 @@ body, html {
 #contextArea, #input {
     background-color: #333;
     border: none;
-    padding: 10px;
+    padding: 12px;
     border-radius: 5px;
     margin: 10px;
     color: white;
@@ -36,7 +36,7 @@ body, html {
     overflow-y: auto;
     background-color: #333;
     border-radius: 10px;
-    padding: 10px;
+    padding: 12px;
     margin-bottom: 70px; /* Adjust based on the height of the inputArea */
 }
 
@@ -47,8 +47,8 @@ body, html {
     border-radius: 18px;
     max-width: 80%;
     word-wrap: break-word;
-    padding: 8px 12px;
-    margin: 4px 0;
+    padding: 10px 16px;
+    margin: 6px 0;
     display: flex;
 }
 
@@ -71,7 +71,7 @@ body, html {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 10px;
+    padding: 12px 10px;
 }
 
 #inputArea input {
@@ -80,7 +80,7 @@ body, html {
 }
 
 #inputArea button {
-    padding: 10px 20px;
+    padding: 12px 24px;
     background-color: #4CAF50;
     color: white;
     border: none;
@@ -93,7 +93,7 @@ body, html {
 }
 
 #inputArea select {
-    padding: 10px;
+    padding: 12px;
     background-color: #333;
     color: white;
     border: none;
@@ -104,8 +104,8 @@ body, html {
 /* Responsive design for mobile devices */
 @media (max-width: 600px) {
     #contextArea, #input {
-        margin: 5px;
-        padding: 8px;
+        margin: 6px;
+        padding: 10px;
         font-size: 14px;
     }
 
@@ -115,7 +115,7 @@ body, html {
     }
 
     #inputArea input {
-        margin-bottom: 5px;
+        margin-bottom: 6px;
     }
 
     #inputArea button {
